@@ -10,11 +10,11 @@ version: "62.0"
 ## Quick Search
 
 ```bash
-# Find any keyword across all skills
-grep -r "keyword" ~/.claude/skills/salesforce/
+# Find any keyword across all skills (from your project root)
+grep -r "keyword" .claude/skills/
 
 # Find which skill covers a topic
-grep -r "when_to_use" ~/.claude/skills/salesforce/*/SKILL.md
+grep -r "when_to_use" .claude/skills/*/SKILL.md
 ```
 
 ## Skills by Category
@@ -57,7 +57,7 @@ grep -r "when_to_use" ~/.claude/skills/salesforce/*/SKILL.md
 
 | File | Covers |
 |------|--------|
-| **`_PATTERNS.md`** | Order of execution, governor limits philosophy, sharing model, security model, platform events, Custom Metadata vs Custom Settings |
+| **`sf-patterns/SKILL.md`** | Order of execution, governor limits philosophy, sharing model, security model, platform events, Custom Metadata vs Custom Settings |
 
 ## Skill Layering
 
@@ -66,8 +66,7 @@ These skills document **how the Salesforce platform works** — they are technol
 For project-specific patterns (fflib, NebulaLogger, naming conventions, code standards), use project-level skills:
 
 ```
-~/.claude/skills/salesforce/     ← this project (platform reference)
-your-project/.claude/skills/     ← project skills (team conventions)
+your-project/.claude/skills/     ← copy from this repo + your team's own skills
 ```
 
 ## When to Use Which Skill
@@ -83,5 +82,5 @@ your-project/.claude/skills/     ← project skills (team conventions)
 | Set up a scratch org | `sf-cli/SKILL.md` |
 | Maintain an Aura component | `aura/SKILL.md` |
 | Maintain a VF page | `visualforce/SKILL.md` |
-| Understand save-order bugs | `_PATTERNS.md` |
-| Debug sharing/security | `_PATTERNS.md` |
+| Understand save-order bugs | `sf-patterns/SKILL.md` |
+| Debug sharing/security | `sf-patterns/SKILL.md` |
