@@ -9,5 +9,6 @@ Thumbs.db
 .idea/
 .vscode/
 
-# Claude session state
-.claude/
+# Claude session state (but not skills)
+.claude/*
+!.claude/skills/

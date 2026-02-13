@@ -12,14 +12,17 @@ Meanwhile, your developers are context-switching to Salesforce documentation doz
 
 Skip the server. Put the reference material directly in Claude's skill context.
 
-This project is 9 dense, searchable skill files covering the Salesforce platform — not opinions about how your team should work, but documentation of how Salesforce itself works. No server to provision. No API credentials to manage. No security review. Clone it, symlink it, and every Claude Code session in your org has a Salesforce-fluent copilot.
+This project is 9 dense, searchable skill files covering the Salesforce platform — not opinions about how your team should work, but documentation of how Salesforce itself works. No server to provision. No API credentials to manage. No security review. Copy the skills into your project and every Claude Code session has a Salesforce-fluent copilot.
 
 ```bash
+# Clone this repo
 git clone https://github.com/weytani/sf-claude-skills.git
-ln -s /path/to/sf-claude-skills ~/.claude/skills/salesforce
+
+# Copy the skills into your Salesforce project
+cp -r sf-claude-skills/.claude/skills/* your-project/.claude/skills/
 ```
 
-That's it. No infrastructure. No tokens. No approval chain.
+That's it. No infrastructure. No tokens. No approval chain. No plugin install that IT can block. Just files in your project repo that Claude Code auto-discovers.
 
 ## What's Covered
 
@@ -35,15 +38,15 @@ That's it. No infrastructure. No tokens. No approval chain.
 | **Aura** | `aura/SKILL.md` | ⚠️ LEGACY — Bundle structure, events, `$A.enqueueAction`, 12-row migration-to-LWC table |
 | **Visualforce** | `visualforce/SKILL.md` | ⚠️ LEGACY — Pages, controllers, expressions, view state, RemoteAction |
 
-Plus cross-cutting reference (`_PATTERNS.md`) covering order of execution, sharing model, security model, platform events, and Custom Metadata vs Custom Settings.
+Plus cross-cutting reference (`sf-patterns/SKILL.md`) covering order of execution, sharing model, security model, platform events, and Custom Metadata vs Custom Settings.
 
 ## Why Not an MCP Server?
 
 | | MCP Server | This Project |
 |---|---|---|
-| **Setup** | Provision server, configure auth, manage API tokens | `git clone` + `ln -s` |
-| **Security review** | Needs org API access, credential management, network policies | Read-only markdown files. No API access. |
-| **Rollout** | Per-user or per-team infrastructure | Copy a folder |
+| **Setup** | Provision server, configure auth, manage API tokens | `cp -r` into your project |
+| **Security review** | Needs org API access, credential management, network policies | Read-only markdown files. No API access. No plugins. |
+| **Rollout** | Per-user or per-team infrastructure | Commit to your repo — everyone gets it |
 | **Maintenance** | Server uptime, API version updates, token rotation | `git pull` |
 | **Offline** | No | Yes |
 | **Works on day one** | Rarely | Yes |
@@ -59,16 +62,36 @@ They're complementary. But only one of them ships today.
 
 **Platform truth, not team opinions.** These skills document how Salesforce works — governor limits, trigger context, wire adapter behavior. They don't prescribe architectural patterns like fflib or specific logging frameworks. That's what project-level skills are for.
 
-**Flat and searchable.** 9 skills, no category subdirectories. `grep -r "MIXED_DML" ~/.claude/skills/salesforce/` finds the answer instantly.
+**Flat and searchable.** 10 skill directories, no nested categories. `grep -r "MIXED_DML" .claude/skills/` finds the answer instantly.
 
-## Intended Layering
+## How It Works
 
+Claude Code auto-discovers any `SKILL.md` file inside `.claude/skills/` in your project. No registration, no config file, no plugin install. The YAML frontmatter in each skill tells Claude when to load it:
+
+```yaml
+name: Salesforce Apex Platform Reference
+when_to_use: When writing, reviewing, or debugging Salesforce Apex code
 ```
-~/.claude/skills/salesforce/     ← this project (platform reference)
-your-project/.claude/skills/     ← your team's skills (conventions, frameworks, standards)
+
+**Why this matters for enterprise teams:** Plugins can be blocked by IT via managed settings. MCP servers need infrastructure approval. But `.claude/skills/` files are just markdown committed to your repo — they travel with your code and can't be gatekept separately from the codebase itself.
+
+## Installation
+
+**Copy into your project:**
+```bash
+git clone https://github.com/weytani/sf-claude-skills.git
+mkdir -p your-project/.claude/skills
+cp -r sf-claude-skills/.claude/skills/* your-project/.claude/skills/
 ```
 
-This project is the foundation layer. Your team adds project-specific skills on top — coding standards, framework choices, naming conventions, architectural patterns. The two layers don't conflict because they answer different questions: "how does the platform work?" vs "how does our team work?"
+**Or add as a git submodule** (for centralized updates):
+```bash
+cd your-project
+git submodule add https://github.com/weytani/sf-claude-skills.git .claude/vendor/sf-claude-skills
+cp -r .claude/vendor/sf-claude-skills/.claude/skills/* .claude/skills/
+```
+
+Your team's own project-level skills sit alongside these in the same `.claude/skills/` directory. They answer different questions — "how does the platform work?" vs "how does our team work?" — so they don't conflict.
 
 ## Contributing
 

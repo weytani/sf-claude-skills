@@ -194,7 +194,7 @@ The 16-step sequence when a record is saved:
 15. Execute DML from trigger/flow; if child records saved, repeat from step 1 for those.
 16. Commit all changes to DB. Post-commit logic: send email, enqueue async, fire platform events.
 
-Reference `_PATTERNS.md` for expanded detail on each step and edge cases.
+Reference `sf-patterns/SKILL.md` for expanded detail on each step and edge cases.
 
 ---
 
